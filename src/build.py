@@ -3,7 +3,8 @@
 
 Verifies every checksum in MANIFEST.json first and stops on any mismatch
 (snapshot-spec.md, "Verifying checksums"). Then embeds the captures, unmodified,
-into src/template.html and writes one self-contained HTML file to simulations/.
+into src/template.html and writes one self-contained HTML file to simulations/ plus an identical
+index.html at the repo root so GitHub Pages opens the simulation directly.
 
 Usage:  python3 src/build.py
 """
@@ -43,8 +44,10 @@ def main() -> None:
     html = (ROOT / "src" / "template.html").read_text()
     assert "/*IMGS*/[]" in html, "placeholder missing from template.html"
     OUT.parent.mkdir(exist_ok=True)
-    OUT.write_text(html.replace("/*IMGS*/[]", json.dumps(imgs)))
-    print(f"Wrote {OUT.relative_to(ROOT)} ({OUT.stat().st_size // 1024} KB)")
+    built = html.replace("/*IMGS*/[]", json.dumps(imgs))
+    OUT.write_text(built)
+    (ROOT / "index.html").write_text(built)  # GitHub Pages serves this at the site root
+    print(f"Wrote {OUT.relative_to(ROOT)} and index.html ({OUT.stat().st_size // 1024} KB each)")
 
 if __name__ == "__main__":
     main()

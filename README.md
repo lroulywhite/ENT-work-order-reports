@@ -9,6 +9,7 @@ Guided click-through simulation for Momentus Enterprise customer education. The 
 ## Repository layout
 
 ```
+index.html     Copy of the built simulation, served by GitHub Pages at the site root
 simulations/   Built simulation (self-contained HTML, about 3 MB)
 src/           template.html (the learning layer) and build.py
 assets/snapshots/enterprise-2026-10-v1/
@@ -26,6 +27,10 @@ python3 src/build.py
 `build.py` checks every SHA-256 in `MANIFEST.json` first and stops on a mismatch or missing file. It then embeds the captures unmodified into `src/template.html` and writes `simulations/ENT _ Run a Work Order Report [Simulation].html`.
 
 The file is stored as `ENT _ ...` because Windows file names cannot contain `|`. The page title inside the file is `ENT | Run a Work Order Report [Simulation]`, which is the approved name. Rename the download if you need the pipe.
+
+## GitHub Pages
+
+Publish from the `main` branch, `/ (root)`. The site root opens the simulation (`index.html`). Use that URL as the embed link in Genially. Pages sites are public to anyone with the link, so read the first open item below before sharing it.
 
 ## Verify
 
