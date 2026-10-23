@@ -1,0 +1,80 @@
+{
+  "screens": [
+    {
+      "id": "work-orders-list",
+      "title": "Work Orders list",
+      "navigation_path": "Main Menu > Work Orders > Work Orders",
+      "states": [
+        "row-selected",
+        "actions-menu"
+      ],
+      "state_descriptions": {
+        "row-selected": "One row selected (order 57006), Upcoming Event Work Orders by Department",
+        "actions-menu": "Actions menu open (Edit, Add, Notes, Tools, Reports)"
+      },
+      "files": {
+        "row-selected": "screens/work-orders-list__row-selected.png",
+        "actions-menu": "screens/work-orders-list__actions-menu.png"
+      },
+      "html_fidelity": "screenshot-only",
+      "notes": "Rows grouped by department. The Due Date filter state before this was not captured."
+    },
+    {
+      "id": "work-order-reports",
+      "title": "Work Order Reports dialog",
+      "navigation_path": "Work Orders > select a row > Actions > Reports",
+      "states": [
+        "list",
+        "selected"
+      ],
+      "state_descriptions": {
+        "list": "Report list, nothing selected",
+        "selected": "Work Order - All Items selected"
+      },
+      "files": {
+        "list": "screens/work-order-reports__list.png",
+        "selected": "screens/work-order-reports__selected.png"
+      },
+      "html_fidelity": "screenshot-only",
+      "notes": ""
+    },
+    {
+      "id": "report-prompt",
+      "title": "Report Prompt",
+      "navigation_path": "Work Order Reports > select a report > Select",
+      "states": [
+        "default"
+      ],
+      "state_descriptions": {
+        "default": "Send: To Printer, Include Work Order Attachments unchecked"
+      },
+      "files": {
+        "default": "screens/report-prompt__default.png"
+      },
+      "html_fidelity": "screenshot-only",
+      "notes": "Send dropdown options not captured."
+    },
+    {
+      "id": "report-viewer",
+      "title": "Report Viewer",
+      "navigation_path": "Report Prompt > Run Report",
+      "states": [
+        "default",
+        "tools-menu",
+        "email-options-menu"
+      ],
+      "state_descriptions": {
+        "default": "Service Work Order, All Items, Maintenance, page 1 of 1",
+        "tools-menu": "Tools menu open (export formats)",
+        "email-options-menu": "Email Options menu open (Attach to Email, Email to Myself)"
+      },
+      "files": {
+        "default": "screens/report-viewer__default.png",
+        "tools-menu": "screens/report-viewer__tools-menu.png",
+        "email-options-menu": "screens/report-viewer__email-options-menu.png"
+      },
+      "html_fidelity": "screenshot-only",
+      "notes": "Save To menu not captured. Opening Email Options while Tools is open was not captured."
+    }
+  ]
+}

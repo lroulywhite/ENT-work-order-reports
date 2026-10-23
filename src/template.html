@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ENT | Run a Work Order Report [Simulation]</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0c0d2b;overflow:hidden;font-family:'Source Sans Pro','Inter',Arial,sans-serif}
+#wrap{position:absolute;left:0;top:0;width:1920px;height:1006px;transform-origin:0 0;background:#0c0d2b}
+#stage{position:absolute;left:0;top:0;width:1920px;height:920px;overflow:hidden;background:#fff}
+#shot{position:absolute;left:0;top:0;width:1920px;height:auto;display:block;user-select:none;-webkit-user-drag:none}
+#hot{position:absolute;inset:0}
+.hs{position:absolute;cursor:pointer}
+#sim-ring{position:absolute;border-radius:6px;outline:3px solid #fe5545;outline-offset:3px;box-shadow:0 0 0 6px rgba(254,85,69,.25);animation:simPulse 1.6s ease-in-out infinite;pointer-events:none}
+@keyframes simPulse{0%,100%{box-shadow:0 0 0 6px rgba(254,85,69,.25)}50%{box-shadow:0 0 0 10px rgba(254,85,69,.10)}}
+#sim-scrim{position:absolute;inset:0;z-index:5;background:rgba(40,42,60,.55);-webkit-backdrop-filter:blur(9px) grayscale(1);backdrop-filter:blur(9px) grayscale(1)}
+#sim-card{position:absolute;z-index:10;width:392px;background:#fff;color:#1d1d2b;border-radius:8px;border-left:6px solid #4146E0;padding:18px 20px 16px;line-height:1.4;transform-origin:0 0;
+ box-shadow:0 0 0 1px rgba(8,14,50,.55),0 10px 24px rgba(8,14,50,.55),0 22px 52px rgba(8,14,50,.60),0 44px 110px rgba(8,14,50,.70)}
+#sim-card h2{font-size:21px;font-weight:700;line-height:1.2;margin:0 0 8px}
+#sim-card p{font-size:16px;margin:0 0 10px}
+#sim-card .sim-prog{font-size:13px;font-weight:600;color:#5a5d78;margin:0 0 6px;padding-right:76px}
+#sim-card h2.sim-point-h{display:flex;align-items:center;gap:10px;background:#FFEDEA;border-radius:8px;padding:9px 14px;margin:0 0 12px}
+#sim-card h2.sim-point-h svg{flex:none;transition:transform .2s}
+#sim-card .sim-top-actions{position:absolute;top:6px;right:8px;display:flex;gap:2px}
+#sim-card button.sim-icon-btn{width:34px;height:34px;padding:0;border:0;background:none;color:#5a5d78;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+#sim-card button.sim-icon-btn:hover{background:#eef0ff;color:#4146E0}
+#sim-card button:focus-visible{outline:3px solid #fe5545;outline-offset:2px}
+#sim-card .sim-row{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+#sim-card button.primary{background:#4146E0;color:#fff;border:0;border-radius:6px;font:inherit;font-weight:600;font-size:16px;padding:9px 22px;cursor:pointer}
+#sim-card button.primary:hover{background:#2f34c4}
+#sim-card .sim-msg{background:#FFEDEA;border-left:5px solid #fe5545;border-radius:6px;padding:9px 12px;font-size:15px;margin:2px 0 10px;color:#5a1a12}
+#sim-card .sim-msg[hidden]{display:none}
+#sim-card.shake{animation:shake .38s}
+@keyframes shake{0%,100%{translate:0}20%{translate:-7px}40%{translate:7px}60%{translate:-5px}80%{translate:5px}}
+#sim-card.wide{width:1040px;padding:44px 56px 36px;border-left:10px solid #4146E0;border-radius:12px}
+#sim-card.wide h2{font-size:46px;line-height:1.15;margin-bottom:22px}
+#sim-card.wide .sim-benefit{font-size:29px;font-weight:600;line-height:1.35;color:#2b2e6b;margin:0 0 20px}
+#sim-card.wide h3{font-size:28px;margin:22px 0 10px}
+#sim-card.wide ul{margin:0 0 16px;padding-left:34px}
+#sim-card.wide li{font-size:26px;line-height:1.35;margin-bottom:14px}
+#sim-card.wide button.primary{font-size:21px;padding:13px 34px}
+#sim-card.wide .sim-good{font-size:32px;font-weight:700;color:#4146E0;margin:0 0 6px}
+#sim-card .sim-scenario{background:#FFF1CC;border-left:8px solid #FFB300;border-radius:8px;padding:15px 22px;margin:0 0 8px;font-size:25px;line-height:1.35;color:#3a2c00}
+#sim-card .sim-scenario strong{display:block;font-size:23px;font-weight:700;margin-bottom:2px;color:#7a5200}
+#sim-card.wide .sim-row{margin-top:18px}
+#sim-card.wide .sim-msg{font-size:20px}
+#bar{position:absolute;left:0;top:920px;width:1920px;height:86px;background:#0c0d2b;display:flex;align-items:center;gap:36px;padding:0 44px;color:#fff;font-family:'Source Sans Pro','Inter',Arial,sans-serif}
+#bar .b-head{flex:0 0 232px;font-size:21px;font-weight:700;color:#c9ccff;line-height:1.2}
+#bar .b-head small{display:block;font-size:17px;font-weight:600;color:#9fa3e8;margin-top:3px}
+#bar .b-items{flex:1;display:flex;gap:28px;align-items:center}
+#bar .b-item{flex:1 1 0;display:flex;align-items:center;gap:13px;font-size:18px;line-height:1.25;color:#fff;min-width:0}
+#bar .b-box{flex:0 0 32px;width:32px;height:32px;border-radius:50%;border:2.5px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center}
+#bar .b-item.on .b-box{background:#2fbf71;border-color:#2fbf71}
+#bar .b-item.on{color:rgba(255,255,255,.8)}
+#bar .b-item.pop .b-box{animation:bpop .45s ease}
+@keyframes bpop{0%{transform:scale(.6)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){#bar .b-item.pop .b-box{animation:none}#sim-ring{animation:none}#sim-card.shake{animation:none}}
+#sim-card.wide .sim-top-actions{top:14px;right:18px}
+#sim-card.wide button.sim-icon-btn{width:42px;height:42px}
+</style></head><body>
+<div id="wrap">
+  <div id="stage"><img id="shot" alt="Momentus Enterprise screen"><div id="hot"></div><div id="sim-ring" hidden></div><div id="sim-scrim"></div><div id="sim-card" role="dialog" aria-live="polite"></div></div>
+  <div id="bar" aria-live="polite"><div class="b-head"><span>What you will learn</span><small id="bcount">0 of 4 covered</small></div><div class="b-items" id="bitems"></div></div>
+</div>
+<script>
+var IMGS=/*IMGS*/[];
+var F=1920/1910, STAGE_H=920;
+var ITEMS=['Open the Reports option for a work order','Choose the report that fits the job','Run the report','Find the export and email options'];
+var ITEM_STEPS=['choose','select','viewer','emailmenu'];
+var CLICK='<svg viewBox="-1 -1 34 34" width="30" height="30" aria-hidden="true" fill="none" stroke="#fe5545" stroke-linecap="round" stroke-linejoin="round"><path d="M11 11 L31 19.2 L25.1 22.3 L30.1 27.4 L27.3 30.1 L22.3 25.1 L19.2 31 Z" stroke-width="2.3"/><path d="M12.3 0.6 V6 M3.8 4 L7.5 7.6 M20.7 4 L17 7.6 M0.6 12.3 H6 M3.8 20.7 L7.5 17" stroke-width="2.4"/></svg>';
+var TIPS={default:'That report is not the one for this job. Choose Work Order - All Items to include every item.',open:'Open Items would leave out items that are not open. This job needs every item, so choose Work Order - All Items.'};
+var ROWS=['Work Order','Daily Work Order','Event Work Order','Report List','Work Order - All Items','Work Order - Open Items','Work Order Custom Indiana CC','Work Order Receipt'];
+var STEPS=[
+ {id:'intro'},
+ {id:'actions',num:1,img:0,type:'click',rect:[1659,108,121,42],avoid:[[1791,108,104,42]],title:'Select Actions',body:'Work order 57006 is selected in the list. Open Actions to see what you can do with it.'},
+ {id:'reports',num:2,img:1,type:'click',rect:[1540,289,236,29],avoid:[[1532,154,248,174]],title:'Select Reports',body:'Reports is the last option in the menu.'},
+ {id:'choose',num:3,img:2,type:'decide',rect:[856,455,534,30],avoid:[[856,333,534,242],[1725,858,170,42]],title:'Choose the report',body:'Maintenance needs a copy of work order 57006 that lists every item, not only the open ones. Select the report that fits.'},
+ {id:'select',num:3,img:3,type:'click',rect:[1811,858,84,42],avoid:[[1725,858,73,42],[856,333,534,242]],title:'Confirm your choice',body:'Work Order - All Items is highlighted. Select the Select button to confirm.'},
+ {id:'run',num:4,img:4,type:'click',rect:[1771,858,124,42],avoid:[[1533,858,89,42],[1636,858,121,42]],title:'Select Run Report',body:'The Report Prompt shows the Send field set to To Printer and an Include Work Order Attachments checkbox. Run the report.'},
+ {id:'viewer',num:5,img:5,type:'click',rect:[630,130,82,38],avoid:[[730,130,150,38]],title:'Select Tools',body:'The report opens in Report Viewer. Open Tools to see your export choices.'},
+ {id:'toolsmenu',num:5,img:6,type:'info',rect:[366,173,357,332],avoid:[[630,130,260,38]],title:'Export formats',body:'Tools lists the formats you can export to, including PDF, Excel, and Word.'},
+ {id:'email',num:5,img:5,type:'click',rect:[730,130,150,38],avoid:[[630,130,82,38]],title:'Select Email Options',body:'Now see how you can send the report by email.'},
+ {id:'emailmenu',num:5,img:7,type:'info',rect:[645,173,250,84],avoid:[[630,130,260,38]],nextLabel:'Finish',title:'Email choices',body:'Email Options has two choices: Attach to Email and Email to Myself.'},
+ {id:'done'}
+];
+var N=5;
+var cur=0, prevDone=[], wrap=document.getElementById('wrap'), card=document.getElementById('sim-card'),
+ shot=document.getElementById('shot'), hot=document.getElementById('hot'), ring=document.getElementById('sim-ring'),
+ scrim=document.getElementById('sim-scrim'), stage=document.getElementById('stage'), K=1;
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+function idx(id){for(var i=0;i<STEPS.length;i++)if(STEPS[i].id===id)return i;return -1}
+var BACK='<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="currentColor"/></svg>';
+var RESTART='<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" fill="currentColor"/></svg>';
+var TICK='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function drawBar(){
+  var done=ITEM_STEPS.map(function(id){return cur>0&&cur>=idx(id)});
+  var n=done.filter(Boolean).length,h='';
+  ITEMS.forEach(function(t,i){var on=done[i];h+='<div class="b-item'+(on?' on':'')+((on&&!prevDone[i])?' pop':'')+'"><span class="b-box">'+(on?TICK:'')+'</span><span>'+t+'</span></div>';prevDone[i]=on});
+  document.getElementById('bitems').innerHTML=h;document.getElementById('bcount').textContent=n+' of '+ITEMS.length+' covered';
+}
+function topActions(){return '<div class="sim-top-actions"><button class="sim-icon-btn" id="b-back" aria-label="Back" title="Back">'+BACK+'</button><button class="sim-icon-btn" id="b-restart" aria-label="Restart" title="Restart">'+RESTART+'</button></div>'}
+function clearConfetti(){var c=document.getElementById('confetti');if(c)c.remove()}
+function go(i){cur=i;clearConfetti();render()}
+function msg(t){var m=card.querySelector('.sim-msg');if(!m)return;m.textContent=t;m.hidden=false;card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake')}
+function place(s){
+  var w=card.offsetWidth*K,h=card.offsetHeight*K+60*K; // room for a nudge message
+  var T={x:s.rect[0]*F,y:s.rect[1]*F,w:s.rect[2]*F,h:s.rect[3]*F};
+  var prot=[s.rect].concat(s.avoid||[]).map(function(r){return {x:r[0]*F-14,y:r[1]*F-14,w:r[2]*F+28,h:r[3]*F+28}});
+  var tcx=T.x+T.w/2,tcy=T.y+T.h/2,best=null;
+  // the card's shadow reaches about 80px sideways, 70px up and 150px down; keep all of it off every control
+  [1,.6,.3].some(function(m){
+    var L=80*m*K,R=80*m*K,U=70*m*K,D=150*m*K;best=null;
+    for(var y=10;y<=STAGE_H-h-10;y+=10)for(var x=10;x<=1920-w-10;x+=10){
+      var bx=x-L,by=y-U,bw=w+L+R,bh=h+U+D,hit=false;
+      for(var k=0;k<prot.length;k++){var p=prot[k];if(bx<p.x+p.w&&bx+bw>p.x&&by<p.y+p.h&&by+bh>p.y){hit=true;break}}
+      if(hit)continue;
+      var d=Math.hypot(x+w/2-tcx,y+h/2-tcy);if(!best||d<best.d)best={d:d,x:x,y:y};
+    }
+    return !!best;
+  });
+  if(!best)best={x:Math.max(10,Math.min(1920-w-10,T.x-w-100)),y:10};
+  card.style.left=best.x+'px';card.style.top=best.y+'px';card.style.transform='scale('+K+')';
+}
+function render(){
+  var s=STEPS[cur];card.className='';card.style.cssText='';hot.innerHTML='';ring.hidden=true;
+  if(s.id==='intro'||s.id==='done'){
+    scrim.style.display=(s.id==='intro')?'block':'none';
+    if(s.id==='done'){shot.src=IMGS[5]}else{shot.src=IMGS[0]}
+    card.className='wide';
+    if(s.id==='intro'){
+      card.innerHTML='<h2>Run a work order report</h2><p class="sim-benefit">Get a printable work order for any job in a few clicks.</p><div class="sim-scenario"><strong>Scenario</strong><span>Maintenance needs a copy of work order 57006 with every item on it.</span></div><h3>What you will learn</h3><ul>'+ITEMS.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul><div class="sim-row"><span></span><button class="primary" id="b-start">Start</button></div>';
+      centerWide(1.25);card.querySelector('#b-start').onclick=function(){go(1)};
+    }else{
+      card.innerHTML='<div class="sim-top-actions"><button class="sim-icon-btn" id="b-back" aria-label="Back" title="Back">'+BACK+'</button></div><div class="sim-good">Good job!</div><h2>You can run a work order report</h2><ul><li><b>Reports:</b> open Actions, then Reports, for a selected work order.</li><li><b>Report choice:</b> pick Work Order - All Items to cover every item.</li><li><b>Run Report:</b> review the Report Prompt, then open the report in Report Viewer.</li><li><b>Viewer options:</b> Tools lists export formats and Email Options lists email choices.</li></ul><div class="sim-row"><span></span><button class="primary" id="b-restart2">Restart</button></div>';
+      scrim.style.display='none';centerWide(1.25);
+      card.querySelector('#b-back').onclick=function(){go(cur-1)};card.querySelector('#b-restart2').onclick=function(){go(0)};
+      if(!reduce)confetti();
+    }
+    drawBar();return;
+  }
+  scrim.style.display='none';shot.src=IMGS[s.img];
+  var num=s.num;
+  var h='<div class="sim-prog">Run a work order report: step '+num+' of '+N+'</div>'+topActions();
+  if(s.type==='info'){h+='<h2>'+s.title+'</h2>'}
+  else h+='<h2 class="sim-point-h">'+CLICK+'<span>'+s.title+'</span></h2>';
+  h+='<p>'+s.body+'</p><div class="sim-msg" hidden></div>';
+  if(s.type==='info')h+='<div class="sim-row"><span></span><button class="primary" id="b-next">'+(s.nextLabel||'Next')+'</button></div>';
+  card.innerHTML=h;
+  card.querySelector('#b-back').onclick=function(){go(cur-1)};
+  card.querySelector('#b-restart').onclick=function(){go(0)};
+  var nx=card.querySelector('#b-next');if(nx)nx.onclick=function(){go(cur+1)};
+  if(s.type==='click'){
+    addHot(s.rect,function(){go(cur+1)});showRing(s.rect);
+  }else if(s.type==='decide'){
+    showRing(s.rect);
+    ROWS.forEach(function(name,i){var r=[856,333+30*i,534,30];
+      addHot(r,function(){ if(i===4){go(cur+1)}else{msg(i===5?TIPS.open:TIPS.default)} });});
+  }
+  var base=s.id==='choose'?s:s;
+  K=Math.min(1.7,Math.max(1,1/curScale));place(s);flip(s);drawBar();
+}
+function flip(s){var sv=card.querySelector('.sim-point-h svg');if(!sv)return;var tx=(s.rect[0]+s.rect[2]/2)*F,cx=card.offsetLeft+card.offsetWidth*K/2;sv.style.transform=tx>cx?'scaleX(-1)':'none'}
+function centerWide(cap){var k=Math.min(cap,Math.max(1,1/curScale));K=k;var w=card.offsetWidth*k,h=card.offsetHeight*k;card.style.left=((1920-w)/2)+'px';card.style.top=Math.max(10,(STAGE_H-h)/2)+'px';card.style.transform='scale('+k+')'}
+function addHot(r,fn){var d=document.createElement('div');d.className='hs';d.style.cssText='left:'+r[0]*F+'px;top:'+r[1]*F+'px;width:'+r[2]*F+'px;height:'+r[3]*F+'px';d.addEventListener('click',function(e){e.stopPropagation();fn()});hot.appendChild(d)}
+function showRing(r){ring.hidden=false;ring.style.cssText='left:'+r[0]*F+'px;top:'+r[1]*F+'px;width:'+r[2]*F+'px;height:'+r[3]*F+'px'}
+stage.addEventListener('click',function(e){
+  if(cur===0||cur===STEPS.length-1||card.contains(e.target))return;
+  msg('This is a guided simulation. Use the highlighted control or the buttons in the guide to continue.');
+});
+var curScale=1;
+function fit(){curScale=Math.min(innerWidth/1920,innerHeight/1006);
+  wrap.style.transform='translate('+Math.max(0,(innerWidth-1920*curScale)/2)+'px,'+Math.max(0,(innerHeight-1006*curScale)/2)+'px) scale('+curScale+')';render()}
+addEventListener('resize',fit);
+function momentusConfetti(card, canvas, options) {
+  options = options || {};
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var running = false;
+  var colors = options.colors || ['#4146E0','#1C1E61','#B166E3','#8B6FE8','#674DE6'];
+  var OVERFLOW_TOP = options.overflowTop != null ? options.overflowTop : 70;
+  var OVERFLOW_SIDE = options.overflowSide != null ? options.overflowSide : 50;
+  var OVERFLOW_BOTTOM = options.overflowBottom != null ? options.overflowBottom : 250;
+  var COUNT = options.count || 50;
+  var ORIGIN_Y_FRACTION = options.originYFraction != null ? options.originYFraction : 0.35;
+  var MAX_LIFE_FRAMES = options.maxLifeFrames || 170;
+  var STAR_POINTS = [[-0.4604,-0.8877],[-0.1806,-0.1831],[-0.8826,-0.4604],[-0.8877,-0.2747],[-0.2060,0.0000],[-0.8852,0.2722],[-0.8877,0.4604],[-0.1831,0.1806],[-0.4604,0.8826],[-0.2747,0.8877],[0.0000,0.2060],[0.2722,0.8852],[0.4604,0.8877],[0.1806,0.1831],[0.8826,0.4604],[0.8877,0.2747],[0.2060,0.0000],[0.8852,-0.2722],[0.8877,-0.4604],[0.1831,-0.1806],[0.4604,-0.8826],[0.2747,-0.8877],[0.0000,-0.2060],[-0.2722,-0.8852]];
+  var HOLE_POINTS = [[-0.0992,-0.1043],[0.1043,-0.0992],[0.0992,0.1043],[-0.1043,0.0992]];
+  function drawStar(size) {
+    ctx.beginPath();
+    ctx.moveTo(STAR_POINTS[0][0] * size, STAR_POINTS[0][1] * size);
+    for (var i = 1; i < STAR_POINTS.length; i++) { ctx.lineTo(STAR_POINTS[i][0] * size, STAR_POINTS[i][1] * size); }
+    ctx.closePath();
+    ctx.moveTo(HOLE_POINTS[0][0] * size, HOLE_POINTS[0][1] * size);
+    for (var j = 1; j < HOLE_POINTS.length; j++) { ctx.lineTo(HOLE_POINTS[j][0] * size, HOLE_POINTS[j][1] * size); }
+    ctx.closePath();
+  }
+  function resize() {
+    if (options.stage) { canvas.width = 1920; canvas.height = 1080; return; }
+    canvas.width = card.offsetWidth + OVERFLOW_SIDE * 2;
+    canvas.height = card.offsetHeight + OVERFLOW_TOP + OVERFLOW_BOTTOM;
+  }
+  function spawnConfetti() {
+    particles = [];
+    var POWER = options.power || 1;
+    var origins = options.origins || [{ x: OVERFLOW_SIDE + card.offsetWidth / 2, y: OVERFLOW_TOP + card.offsetHeight * ORIGIN_Y_FRACTION }];
+    for (var o = 0; o < origins.length; o++) {
+      for (var i = 0; i < COUNT; i++) {
+        particles.push({
+          x: origins[o].x, y: origins[o].y,
+          vx: (Math.random() - 0.5) * 10 * POWER,
+          vy: ((Math.random() * -9) - 3) * POWER,
+          size: Math.random() * 8 + (options.minSize || 10),
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360, rotationSpeed: (Math.random() - 0.5) * 14,
+          gravity: 0.3 + Math.random() * 0.12,
+          life: -(o * (options.stagger || 0))
+        });
+      }
+    }
+    running = true;
+    requestAnimationFrame(animate);
+  }
+  function animate() {
+    if (!canvas.isConnected) { running = false; return; }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var alive = false;
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      p.life += 1; if (p.life < 0) { alive = true; continue; } p.x += p.vx; p.y += p.vy; p.vy += p.gravity; p.vx *= 0.99; p.rotation += p.rotationSpeed;
+      if (p.y < canvas.height + 20) {
+        alive = true;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate((p.rotation * Math.PI) / 180); ctx.fillStyle = p.color; drawStar(p.size); ctx.fill('evenodd'); ctx.restore();
+      }
+    }
+    if (alive && allParticlesUnderMaxLife()) { requestAnimationFrame(animate); }
+    else { ctx.clearRect(0, 0, canvas.width, canvas.height); running = false; }
+    function allParticlesUnderMaxLife() {
+      for (var j = 0; j < particles.length; j++) { if (particles[j].life > MAX_LIFE_FRAMES) return false; }
+      return true;
+    }
+  }
+  resize();
+  setTimeout(function () { resize(); spawnConfetti(); }, options.delay != null ? options.delay : 150);
+  return { fire: spawnConfetti, resize: resize, isRunning: function () { return running; } };
+}
+function confetti(){var cv=document.createElement('canvas');cv.id='confetti';cv.setAttribute('aria-hidden','true');cv.style.cssText='position:fixed;left:0;top:0;width:1920px;height:1080px;pointer-events:none;z-index:10000;';wrap.appendChild(cv);momentusConfetti(card,cv,{stage:true,count:70,power:1.7,minSize:12,maxLifeFrames:300,stagger:14,origins:[{x:330,y:680},{x:960,y:470},{x:1590,y:680}]});}
+fit();
+</script></body></html>

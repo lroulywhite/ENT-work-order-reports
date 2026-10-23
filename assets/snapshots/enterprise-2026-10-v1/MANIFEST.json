@@ -1,0 +1,25 @@
+{
+  "product": "enterprise",
+  "snapshot_id": "enterprise-2026-10-v1",
+  "captured_on": "2026-10-23",
+  "captured_on_note": "Date the captures were supplied to this project. The actual capture date was not recorded.",
+  "captured_by": null,
+  "source_environment": null,
+  "app_version_visible": null,
+  "viewport": "1910x915",
+  "viewport_note": "Differs from the 1920x1080 standard in snapshot-spec.md. Simulations scale these proportionally to 1920 wide.",
+  "mock_data_confirmed_safe": true,
+  "mock_data_confirmation": "Stated by DCS in chat on 2026-10-23 (all data ok to show). Product/Security confirmation is not recorded.",
+  "duplicates_dropped": "Two supplied files were byte-identical copies of the Tools menu and Email Options menu captures and were not stored.",
+  "files": {
+    "inventory.json": "3e1d6425aae5054ca9c7799bd290cc49e035f583d39f65354af29a13fedf0f2d",
+    "screens/report-prompt__default.png": "5eb6f656ae684498b1934501fa083b4335622d7fc4734ff4f072fcf95fbb7456",
+    "screens/report-viewer__default.png": "d8aefb862ab4eecc33a368295ba444dd0d0a450db5a0cb8bb4079a240a70cd8c",
+    "screens/report-viewer__email-options-menu.png": "0380f072232a547dd745ef0c82612740322866650686992335df70ad5bdfde73",
+    "screens/report-viewer__tools-menu.png": "4e83c51e7484c04ca072ee413e1393f5179d3b0c8e52ae0fd00e7875c2d9bd75",
+    "screens/work-order-reports__list.png": "02908425cd6ba275f3b4b44c0a3724df61efde188ecb022956b071e18f3e7b3f",
+    "screens/work-order-reports__selected.png": "9e0a89f14cdf2ff29ec7e360eafa2d23bd9e287b8cb345a8fe6e89018002e8a7",
+    "screens/work-orders-list__actions-menu.png": "ccf114adb18c135190662e6337627365d65d66eafa4af3fe07b3e6fcb210cca7",
+    "screens/work-orders-list__row-selected.png": "d40cc99e6b7111689656a05559931090ee84d4363fc0f591b86edbc20d708835"
+  }
+}
